@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RansomwareApplication", "RansomwareApplication\RansomwareApplication.csproj", "{69FC3D74-A4CE-4602-9495-15441FF338DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69FC3D74-A4CE-4602-9495-15441FF338DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69FC3D74-A4CE-4602-9495-15441FF338DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69FC3D74-A4CE-4602-9495-15441FF338DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69FC3D74-A4CE-4602-9495-15441FF338DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0151E29E-023F-4F53-B758-B49D78F760F0}
+	EndGlobalSection
+EndGlobal
